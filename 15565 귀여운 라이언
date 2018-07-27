@@ -1,0 +1,34 @@
+#include <iostream>
+
+using namespace std;
+
+int arr[1000000];
+int main() {
+
+	int n, k, temp, temp2 = 0;
+	cin >> n >> k;
+
+	for (int i = 0; i < n; i++) {
+		cin >> temp;
+		if (temp == 1) {
+			arr[temp2] = i;
+			temp2++;
+		}
+	}
+	
+	if (k > temp2) {
+		cout << "-1" << endl;
+		cin >> n;
+		return 0;
+	}
+	else {
+		temp = n;
+		for (int i = 0; i <= temp2 - k; i++) {
+			if (temp > arr[i + k - 1] - arr[i] + 1) {
+				temp = arr[i + k - 1] - arr[i] + 1;
+			}
+		}
+		cout << temp;
+		return 0;
+	}
+}
