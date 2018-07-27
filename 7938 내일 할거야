@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+typedef struct _Data {
+	int L;
+	int R;
+	_Data(int a, int b) {
+		L = a;
+		R = b;
+	}
+}Data;
+
+bool operator <(Data a, Data b) {
+	return a.R < b.R;
+}
+vector <Data> arr1;
+
+int stack_num = 1;
+int main() {
+	int n, t1, t2, t3, t4;
+	cin >> n;
+	
+
+	for (int i = 0; i < n; i++) {
+		cin >> t1 >> t2;
+		arr1.push_back(Data(t2-t1,t2));
+	}
+	sort(arr1.begin(), arr1.end());
+
+	t1 = arr1.back().L;
+	t2 = arr1.back().R;
+	for (int i = 0; i < n - 1; i++) {
+		arr1.pop_back();
+		t3 = arr1.back().L;
+		t4 = arr1.back().R;
+		if (t4 >= t1) {
+			t1 = t3 - t4 + t1;
+			t2 = t2;
+		}
+		else {
+			t1 = t3;
+			t2 = t4;
+		}
+	}
+	cout << t1;
+	return 0;
+}
