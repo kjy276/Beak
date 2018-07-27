@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <bitset>
+#pragma warning(disable:4996)
+using namespace std;
+
+bitset<33554432> bit;
+int main() {
+	int n;
+	bit.reset();
+	while(~scanf("%d",&n)) {
+		if (!bit[n]) {
+			bit.set(n,true);
+			printf("%d ",n);
+		}
+	}
+	return 0;
+}
