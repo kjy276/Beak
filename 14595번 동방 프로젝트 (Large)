@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Data {
+	public:
+	int x;
+	int y;
+
+	Data(int a, int b) {
+		x = a;
+		y = b;
+	}
+	bool operator < (Data a) {
+		return (x > a.x);
+	}
+};
+
+vector <Data> arr;
+int main() {
+	int n, m, x, y, x_1, y_1;
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		cin >> x >> y;
+		arr.push_back(Data(x, y));
+	}
+	if (m == 0) {
+		cout << n;
+		return 0;
+	}
+
+	sort(arr.begin(), arr.end());
+	
+	x = arr.back().x;
+	y = arr.back().y;
+	arr.pop_back();
+	for (int i = 0; i < m - 1; i++) {
+		x_1 = arr.back().x;
+		y_1 = arr.back().y;
+		arr.pop_back();
+		if (x_1 > y) {
+			n -= y - x;
+			x = x_1;
+			y = y_1;
+		}
+		else {
+			if (y < y_1) {
+				y = y_1;
+			}
+		}
+	}
+	n -= y - x;
+	
+	cout << n;
+	return 0;
+}
