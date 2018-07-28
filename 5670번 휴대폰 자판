@@ -1,0 +1,74 @@
+#include <iostream>
+#include <stdio.h>
+#include <string>
+#pragma warning(disable:4996)
+using namespace std;
+
+
+typedef struct _node {
+	int sum;
+	_node *child[26];
+}node;
+
+node* makeNode() {
+	node* NewNode = (node *)malloc(sizeof(node));
+	for (int i = 0; i < 26; i++) {
+		NewNode->child[i] = NULL;
+	}
+	NewNode->sum = 0;
+	return NewNode;
+}
+
+void deleteNode(node* Node) {
+	for (int i = 0; i < 26; i++) {
+		if (Node->child[i] != NULL) {
+			deleteNode(Node->child[i]);
+		}
+	}
+	free(Node);
+}
+
+string arr[100000];
+
+int main() {
+	node* root;
+	node* temp_node;
+	int n, len, cnt, ans = 0;
+	string temp;
+
+	while (cin >> n) {
+		root = makeNode();
+		for (int i = 0; i < n; i++) {
+			temp_node = root;
+			temp_node->sum++;
+			cin >> temp;
+			arr[i] = temp;
+			len = temp.length();
+			for (int j = 0; j < len; j++) {
+				if (temp_node->child[temp[j] - 'a'] == NULL) {
+					temp_node->child[temp[j] - 'a'] = makeNode();
+				}
+				temp_node = temp_node->child[temp[j] - 'a'];
+				temp_node->sum++;
+			}
+		}
+
+		cnt = 0;
+		for (int i = 0; i < n; i++) {
+			temp = arr[i];
+			len = temp.length();
+			temp_node = root->child[temp[0] - 'a'];
+			cnt++;
+			for (int j = 1; j < len; j++) {
+				if (temp_node->sum != temp_node->child[temp[j] - 'a']->sum) {
+					cnt++;
+				}
+				temp_node = temp_node->child[temp[j] - 'a'];
+			}
+		}
+		printf("%.2f\n", (float)cnt/n);
+		deleteNode(root);
+	}
+
+	return 0;
+}
