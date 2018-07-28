@@ -1,0 +1,116 @@
+#include <iostream>
+#include <stdio.h>
+#include <string>
+#pragma warning(disable:4996)
+using namespace std;
+
+int char_to_int(char a) {
+	if (a >= '0' && a <= '9') {
+		return a - '0'; // 0~9
+	}
+	else if (a >= 'a' && a <= 'z') {
+		return a - 'a' + 10; //10~35;
+	}
+	else if (a >= 'A' && a <= 'Z') {
+		return a - 'A' + 36; //36~61;
+	}
+	else if (a == '.') {
+		return 62;
+	}
+	else {
+		cout << "ERROR!!!!";
+		return -1;
+	}
+}
+
+typedef struct _node {
+	int sum;
+	int end;
+	_node *child[63];
+}node;
+
+node* makeNode() {
+	node* NewNode = (node *)malloc(sizeof(node));
+	for (int i = 0; i < 63; i++) {
+		NewNode->child[i] = NULL;
+	}
+	NewNode->sum = 0;
+	NewNode->end = 0;
+	return NewNode;
+}
+
+void deleteNode(node* Node) {
+	for (int i = 0; i < 63; i++) {
+		if (Node->child[i] != NULL) {
+			deleteNode(Node->child[i]);
+		}
+	}
+	free(Node);
+}
+
+int get_num(node* root_n1, node* root_n2) {
+	int sum = root_n1->end;
+	if (root_n2->sum == 0) {
+		return 1;
+	}
+	else {
+		for (int i = 0; i < 63; i++) {
+			if (root_n1->child[i] != NULL) {
+				if (root_n2->child[i] == NULL) {
+					sum++;
+				}
+				else {
+					sum += get_num(root_n1->child[i], root_n2->child[i]);
+				}
+			}
+		}
+	}
+	return sum;
+}
+
+int main() {
+	node* root_n1;
+	node* root_n2;
+	node* temp_node;
+	int t, n, m, len;
+	string temp;
+	cin >> t;
+	for (int k = 0; k < t; k++) {
+		cin >> n;
+		root_n1 = makeNode();
+		for (int i = 0; i < n; i++) {
+			temp_node = root_n1;
+			temp_node->sum++;
+			cin >> temp;
+			len = temp.length();
+			for (int j = 0; j < len; j++) {
+				if (temp_node->child[char_to_int(temp[j])] == NULL) {
+					temp_node->child[char_to_int(temp[j])] = makeNode();
+				}
+				temp_node = temp_node->child[char_to_int(temp[j])];
+				temp_node->sum++;
+			}
+			temp_node->end = 1;
+		}
+
+		cin >> m;
+		root_n2 = makeNode();
+		for (int i = 0; i < m; i++) {
+			temp_node = root_n2;
+			temp_node->sum++;
+			cin >> temp;
+			len = temp.length();
+			for (int j = 0; j < len; j++) {
+				if (temp_node->child[char_to_int(temp[j])] == NULL) {
+					temp_node->child[char_to_int(temp[j])] = makeNode();
+				}
+				temp_node = temp_node->child[char_to_int(temp[j])];
+				temp_node->sum++;
+			}
+		}
+		cout << get_num(root_n1, root_n2) << endl;
+		deleteNode(root_n1);
+		deleteNode(root_n2);
+	}
+	return 0;
+}
