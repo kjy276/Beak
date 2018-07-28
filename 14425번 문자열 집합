@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#pragma warning(disable:4996)
+using namespace std;
+
+
+typedef struct _node {
+	int is_there;
+	_node *child[26];
+}node;
+
+node* makeNode() {
+	node* NewNode = (node *)malloc(sizeof(node));
+	for (int i = 0; i < 26; i++) {
+		NewNode->child[i] = NULL;
+	}
+	NewNode->is_there = 0;
+	return NewNode;
+}
+
+void deleteNode(node* Node) {
+	for (int i = 0; i < 26; i++) {
+		if (Node->child[i] != NULL) {
+			deleteNode(Node->child[i]);
+		}
+	}
+	free(Node);
+}
+
+int main() {
+	node* root = makeNode();
+	node* temp_node;
+	int n, m, len, cnt, ans = 0;
+	string temp;
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		temp_node = root;
+		cin >> temp;
+		len = temp.length();
+		for (int j = 0; j < len; j++) {
+			if (temp_node->child[temp[j] - 'a'] == NULL) {
+				temp_node->child[temp[j] - 'a'] = makeNode(); 
+			}
+			temp_node = temp_node->child[temp[j] - 'a'];
+		}
+		temp_node->is_there = 1;
+	}
+	for (int i = 0; i < m; i++) {
+		temp_node = root;
+		cin >> temp;
+		cnt = 1;
+		len = temp.length();
+		for (int j = 0; j < len; j++) {
+			if (temp_node->child[temp[j] - 'a'] != NULL) {
+				temp_node = temp_node->child[temp[j] - 'a'];
+			}
+			else {
+				cnt = 0;
+				break;
+			}
+		}
+		ans += cnt * temp_node->is_there;
+	}
+	cout << ans;
+	deleteNode(root);
+	return 0;
+}
