@@ -1,0 +1,49 @@
+#include <iostream>
+
+int dp[5000][27];
+int main() {
+	for (int i = 0; i < 5000; i++) {
+		for (int j = 0; j < 27; j++) {
+			dp[i][j] = 0;
+		}
+	}
+	char input_temp;
+	int temp;
+	int i = 0;
+	std::cin >> input_temp;
+	if (input_temp < '0' || input_temp > '9') {
+		std::cout << 0;
+		return 0;
+	}
+
+	dp[0][input_temp - '0'] = 1;
+	while (std::cin >> input_temp) {
+		if (input_temp < '0' || input_temp > '9') {
+			break;
+		}
+		temp = input_temp - '0';
+		if (temp == 0) {
+			dp[i + 1][10] = (dp[i + 1][10] + dp[i][1]) % 1000000;
+			dp[i + 1][20] = (dp[i + 1][20] + dp[i][2]) % 1000000;
+		}
+		else {
+			dp[i + 1][temp] = (dp[i + 1][temp] + dp[i][1]) % 1000000;
+			dp[i + 1][temp + 10] = (dp[i + 1][temp + 10] + dp[i][1]) % 1000000;
+			dp[i + 1][temp] = (dp[i + 1][temp] + dp[i][2]) % 1000000;
+			if (temp <= 6) {
+				dp[i + 1][temp + 20] = (dp[i + 1][temp + 20] + dp[i][2]) % 1000000;
+			}
+			for(int j = 3; j <= 26; j++) {
+				dp[i + 1][temp] = (dp[i + 1][temp] + dp[i][j]) % 1000000;
+			}
+		}
+		i++;
+	}
+	temp = 0;
+
+	for (int j = 1; j < 27; j++) {
+		temp = (temp + dp[i][j]) % 1000000;
+	}
+	std::cout << temp;
+	return 0;
+}
