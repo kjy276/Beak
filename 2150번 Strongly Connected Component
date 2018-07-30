@@ -1,0 +1,93 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+vector<int> arr[10001];
+vector<int> r_arr[10001];
+vector<vector<int>> ans;
+int cnt = 0;
+
+int visited[10001] = { 0 };
+vector<int> stack;
+void dfs(int i) {
+	int temp;
+	visited[i] = 1;
+	while (!arr[i].empty()) {
+		temp = arr[i].back();
+		arr[i].pop_back();
+		if (visited[temp] == 0) {
+			dfs(temp);
+		}
+	}
+	stack.push_back(i);
+}
+
+void r_dfs(int i) {
+	int temp;
+	visited[i] = 1;
+	while (!r_arr[i].empty()) {
+		temp = r_arr[i].back();
+		r_arr[i].pop_back();
+		if (visited[temp] == 0) {
+			r_dfs(temp);
+		}
+	}
+	ans[cnt].push_back(i);
+}
+
+bool cmp(vector<int> x, vector<int> y) {
+	return x[0] < y[0];
+}
+
+int main() {
+	int v, e, a, b;
+	cin >> v >> e;
+	for (int i = 0; i < e; i++) {
+		cin >> a >> b;
+		arr[a].push_back(b);
+		r_arr[b].push_back(a);
+		visited[a] = 1;
+		visited[b] = 1;
+	}
+
+	for (int i = 1; i <= v; i++) {
+		if (visited[i] == 0) {
+			stack.push_back(i);
+		}
+		visited[i] = 0;
+	}
+
+	for (int i = 0; i < 10001; i++) {
+		if (!arr[i].empty()) {
+			dfs(i);
+		}
+	}
+	for (int i = 0; i < 10001; i++) {
+		visited[i] = 0;
+	}
+	while (!stack.empty()) {
+		a = stack.back();
+		stack.pop_back();
+		if (visited[a] == 0) {
+			ans.resize(cnt + 1);
+			r_dfs(a);
+			cnt++;
+		}
+	}
+
+	for (int i = 0; i < cnt; i++) {
+		sort(ans[i].begin(), ans[i].end());
+	}
+	sort(ans.begin(), ans.end(), cmp);
+	cout << cnt << endl;
+	for (int i = 0; i < cnt; i++) {
+		a = ans[i].size();
+		for (int j = 0; j < a; j++) {
+			cout << ans[i][j] << " ";
+		}
+		cout << "-1\n";
+	}
+	return 0;
+}
