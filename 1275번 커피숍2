@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <vector>
+#pragma warning(disable:4996)
+using namespace std;
+
+long long int arr[2097152] = { 0 };
+
+long long int range_sum(long long int left, long long int right, long long int n, long long int n_left, long long int n_right) {
+	if (n_left == left && n_right == right) {
+		return arr[n];
+	}
+	else if (right <= (n_left + n_right) / 2) {
+		return range_sum(left, right, n * 2, n_left, (n_left + n_right) / 2);
+	}
+	else if (left > (n_left + n_right) / 2) {
+		return range_sum(left, right, n * 2 + 1, (n_left + n_right) / 2 + 1, n_right);
+	}
+	else {
+		return range_sum(left, (n_left + n_right) / 2, n * 2, n_left, (n_left + n_right) / 2) + range_sum((n_left + n_right) / 2 + 1, right, n * 2 + 1, (n_left + n_right) / 2 + 1, n_right);
+	}
+}
+
+int main() {
+	long long int n, q, x, y, a, b, sum, temp, temp2, size = 1;
+	scanf("%lld %lld", &n, &q);
+	while (size < n) {
+		size *= 2;
+	}
+
+	for (int i = 0; i < n; i++) {
+		temp = size + i;
+		scanf("%ld", &arr[temp]);
+		while (temp > 1) {
+			arr[temp / 2] += arr[size + i];
+			temp /= 2;
+		}
+	}
+
+
+	for (int i = 0; i < q; i++) {
+		scanf("%lld %lld %lld %lld", &x, &y, &a, &b);
+		if (x < y) {
+			printf("%lld\n", range_sum(x, y, 1, 1, size));
+		}
+		else {
+			printf("%lld\n", range_sum(y, x, 1, 1, size));
+		}
+		temp2 = size + a - 1;
+		temp = arr[temp2];
+		arr[temp2] = b;
+		while (temp2 > 1) {
+			arr[temp2 / 2] += b - temp;
+			temp2 /= 2;
+		}
+	}
+	return 0;
+}
