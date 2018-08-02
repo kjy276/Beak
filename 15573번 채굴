@@ -1,0 +1,107 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+
+int n, m, k;
+int arr[1000][1000];
+int arr2[1000][1000];
+
+int binary_dig(int d) {
+	int sum = 0;
+	vector<int> arr_x;
+	vector<int> arr_y;
+	int x, y;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			arr2[i][j] = 0;
+		}
+	}
+	for (int i = 0; i < m; i++) {
+		if (arr[0][i] <= d) {
+			arr_x.push_back(i);
+			arr_y.push_back(0);
+			arr2[0][i] = 1;
+		}
+	}
+	for (int i = 1; i < n; i++) {
+		if (arr[i][0] <= d) {
+			arr_x.push_back(0);
+			arr_y.push_back(i);
+			arr2[i][0] = 1;
+		}
+		if (arr[i][m - 1] <= d) {
+			arr_x.push_back(m - 1);
+			arr_y.push_back(i);
+			arr2[i][m - 1] = 1;
+		}
+	}
+
+	while (!arr_x.empty()) {
+		x = arr_x.back();
+		arr_x.pop_back();
+		y = arr_y.back();
+		arr_y.pop_back();
+		sum++;
+		//if (x >= 0 && x <= m - 1 && y >= 0 && y <= n - 1) {
+		if (x + 1 >= 0 && x + 1 <= m - 1 && y >= 0 && y <= n - 1) {
+			if (arr2[y][x + 1] == 0 && arr[y][x + 1] <= d) {
+				arr2[y][x + 1] = 1;
+				arr_x.push_back(x + 1);
+				arr_y.push_back(y);
+			}
+		}
+		if (x - 1 >= 0 && x - 1 <= m - 1 && y >= 0 && y <= n - 1) {
+			if (arr2[y][x - 1] == 0 && arr[y][x - 1] <= d) {
+				arr2[y][x - 1] = 1;
+				arr_x.push_back(x - 1);
+				arr_y.push_back(y);
+			}
+		}
+		if (x >= 0 && x <= m - 1 && y + 1 >= 0 && y + 1 <= n - 1) {
+			if (arr2[y + 1][x] == 0 && arr[y + 1][x] <= d){
+				arr2[y + 1][x] = 1;
+				arr_x.push_back(x);
+				arr_y.push_back(y + 1);
+			}
+		}
+		if (x >= 0 && x <= m - 1 && y - 1 >= 0 && y - 1 <= n - 1) {
+			if (arr2[y - 1][x] == 0 && arr[y - 1][x] <= d) {
+				arr2[y - 1][x] = 1;
+				arr_x.push_back(x);
+				arr_y.push_back(y - 1);
+			}
+		}
+	}
+	return sum;
+}
+
+int main()
+{
+	cin >> n >> m >> k;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> arr[i][j];
+		}
+	}
+	int ans = 524288;
+	int temp = 262144;
+	while (temp) {
+		if (binary_dig(ans) < k) {
+			ans += temp;
+			temp /= 2;
+		}
+		else {
+			ans -= temp;
+			temp /= 2;
+		}
+	}
+	ans -= 2;
+	while (binary_dig(ans) < k) {
+		ans++;
+	}
+
+	cout << ans;
+
+	return 0;
+}
