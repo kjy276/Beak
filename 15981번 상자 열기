@@ -1,0 +1,31 @@
+#include <iostream> 
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main(){
+	int n, sq = 1, max = 1, cnt, max_num = 0;
+	cin >> n;
+	while (max < n) {
+		max *= 2;
+		max_num++;
+	}
+	cout << max_num << endl;
+	while (sq < max) {
+		cnt = 0;
+		for (int i = 0; i < n; i++) {
+			if ((i / sq) % 2 == 0) {
+				cnt++;
+			}
+		}
+		cout << cnt << " ";
+		for (int i = 0; i < n; i++) {
+			if ((i / sq) % 2 == 0) {
+				cout << i + 1 << " ";
+			}
+		}
+		sq *= 2;
+		cout << endl;
+	}
+	return 0;
+}
