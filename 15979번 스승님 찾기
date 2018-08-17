@@ -1,0 +1,45 @@
+#include <iostream> 
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int gcd(int a, int b) {
+	if (b == 0) {
+		return a;
+	}
+	else {
+		return gcd(b, a%b);
+	}
+}
+
+int abs(int a) {
+	if (a > 0) {
+		return a;
+	}
+	else {
+		return -a;
+	}
+}
+
+int main(){
+	int n, m, gcd_num;
+	cin >> n >> m;
+	if (n == 0 && m == 0) {
+		cout << '0';
+		return 0;
+	}
+	if (n > m) {
+		gcd_num = gcd(abs(n), abs(m));
+	}
+	else {
+		gcd_num = gcd(abs(m), abs(n));
+	}
+	if (gcd_num == 1) {
+		cout << '1';
+	}
+	else {
+		cout << '2';
+	}
+	cin >> n;
+	return 0;
+}
