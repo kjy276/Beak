@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int arr[10000];
+int abs_ans = 0;
+int part_ans(int k, int input) {
+	int ans = 0;
+	for (int i = 0; i < k; i++) {
+		ans += arr[i] / input;
+	}
+	return ans;
+}
+
+int find_ans(int n, int k, long long int start, long long int end) {
+	if (start <= end) {
+		long long int temp = (start + end) / 2;
+		if (part_ans(k, temp) >= n) {
+			if (abs_ans < temp) {
+				abs_ans = temp;
+			}
+			return find_ans(n, k, temp + 1, end);
+		}
+		else if (part_ans(k, temp) < n) {
+			return find_ans(n, k, start, temp - 1);
+		}
+	}
+	return 0;
+}
+
+
+int main() {
+	int k, n;
+	cin >> k >> n;
+	for (int i = 0; i < k; i++) {
+		cin >> arr[i];
+	}
+	find_ans(n, k, 0, 2147483647);
+
+	cout << abs_ans;
+
+	return 0;
+}
