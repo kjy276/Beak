@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+typedef struct m_type {
+	int order;
+	int num;
+};
+
+vector<int> arr;
+vector<m_type> arr2;
+
+bool order_num(m_type num1, m_type num2) {
+	return num1.num < num2.num;
+}
+bool order_order(m_type num1, m_type num2) {
+	return num1.order < num2.order;
+}
+
+int main() {
+	int n, m, temp, temp_i;
+	m_type temp_m;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> temp;
+		arr.push_back(temp);
+	}
+	sort(arr.begin(), arr.end());
+	arr.push_back(10000001);
+
+	cin >> m;
+	for (int i = 0; i < m; i++) {
+		cin >> temp;
+		temp_m.order = i;
+		temp_m.num = temp;
+		arr2.push_back(temp_m);
+	}
+	sort(arr2.begin(), arr2.end(), order_num);
+	temp_i = 0;
+	for (int i = 0; i < m; ) {
+		if (arr[temp_i] == arr2[i].num) {
+			arr2[i].num = 1;
+			temp_i++;
+			i++;
+		}
+		else if (arr[temp_i] < arr2[i].num) {
+			temp_i++;
+		}
+		else {
+			arr2[i].num = 0;
+			i++;
+		}
+
+	}
+	sort(arr2.begin(), arr2.end(), order_order);
+	for (int i = 0; i < m; i++) {
+		cout << arr2[i].num << " ";
+	}
+	return 0;
+}
