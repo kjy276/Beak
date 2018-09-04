@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	int a, m, ans = 1;
+	cin >> a >> m;
+	while ((a * ans) % m != 1) {
+		ans++;
+	}
+	cout << ans;
+	return 0;
+}
