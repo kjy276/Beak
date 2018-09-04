@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	int n, a, temp, ans = 0;
+	cin >> n >> a;
+	temp = a;
+	if (n >= a) {
+		while(n / temp > 0) {
+			ans += n / temp;
+			temp *= a;
+		}
+		cout << ans;
+	}
+	else {
+		cout << 0;
+	}
+	return 0;
+}
