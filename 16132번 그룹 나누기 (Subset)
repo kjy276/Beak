@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	long long int arr[49][1177];
+	for (int i = 0; i < 49; i++) {
+		for (int j = 0; j < 1177; j++) {
+			arr[i][j] = 0;
+		}
+	}
+	int n;
+	cin >> n;
+	if (n % 4 == 1 || n % 4 == 2) {
+		cout << 0;
+        return 0;
+	}
+	
+	arr[1][1] = 1;
+	for (int i = 2; i < 49; i++) {
+		arr[i][i] += 1;
+		for (int j = 0; j < 1177; j++) {
+			arr[i][j] += arr[i - 1][j];
+		}
+		for (int j = i; j < 1177; j++) {
+			arr[i][j] += arr[i - 1][j - i];
+		}
+	}
+	cout << arr[n][n*(n + 1) / 4] / 2;
+
+	return 0;
+}
